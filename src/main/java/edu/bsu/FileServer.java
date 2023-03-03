@@ -95,11 +95,12 @@ class ServerThread extends Thread {
                             int bytesRead = fis.read(buffer);
                             if (bytesRead != fileSize) {
                                 dataOutput.writeUTF("F"); // Failure
-                            } else {
+                            }
+                            else {
                                 dataOutput.write(buffer, 0, fileSize);
                             }
-                            dataOutput.writeUTF("S");
                         }
+                        dataOutput.writeUTF("S");
                     }
                     break;
 
