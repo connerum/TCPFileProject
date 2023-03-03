@@ -43,18 +43,26 @@ class ServerThread extends Thread {
         ) {
             byte command = dataInput.readByte();
 
-            if (command == 'L') {
-                // List files
-                File folder = new File(".");
-                File[] files = folder.listFiles();
+            switch (command) {
+                case 'L':
+                    // List files
+                    File folder = new File(".");
+                    File[] files = folder.listFiles();
 
-                for (File file : files) {
-                    if (file.isFile()) {
-                        dataOutput.writeUTF(file.getName());
+                    for (File file : files) {
+                        if (file.isFile()) {
+                            dataOutput.writeUTF(file.getName());
+                        }
                     }
-                }
-                dataOutput.writeUTF("END");
+                    dataOutput.writeUTF("END");
+                    dataOutput.writeUTF("S");
+                    break;
+
+                default:
+                    dataOutput.writeUTF("F");
+                    break;
             }
+
             clientSocket.shutdownOutput();
         }
         catch (IOException e) {
