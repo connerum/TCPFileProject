@@ -25,16 +25,24 @@ public class FileClient {
                 System.out.print("Enter a command (L)ist, (Del)ete, (R)ename, (U)pload, or (D)ownload: ");
                 String command = console.readLine();
 
+                String fileName;
                 switch (command) {
                     case "L":
                         output.writeByte('L');
 
-                        String fileName;
                         while (!(fileName = input.readUTF()).equals("END")) {
                             System.out.println(fileName);
                         }
 
                         String status = input.readUTF();
+                        System.out.println(status.equals("S") ? "operation successful" : "operation failed");
+                        break;
+
+                    case "D":
+                        output.writeByte('D');
+                        fileName = console.readLine();
+                        output.writeUTF(fileName);
+                        status = input.readUTF();
                         System.out.println(status.equals("S") ? "operation successful" : "operation failed");
                         break;
 

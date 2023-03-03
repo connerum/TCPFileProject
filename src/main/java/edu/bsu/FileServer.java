@@ -58,6 +58,16 @@ class ServerThread extends Thread {
                     dataOutput.writeUTF("S");
                     break;
 
+                case 'D':
+                    String fileName = dataInput.readUTF();
+                    File file = new File(fileName);
+                    if (file.delete()) {
+                        dataOutput.writeUTF("S");
+                    }
+                    else {
+                        dataOutput.writeUTF("F");
+                    }
+
                 default:
                     dataOutput.writeUTF("F");
                     break;
