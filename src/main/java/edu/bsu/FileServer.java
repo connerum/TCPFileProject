@@ -68,6 +68,18 @@ class ServerThread extends Thread {
                         dataOutput.writeUTF("F");
                     }
 
+                case 'R':
+                    String oldFileName = dataInput.readUTF();
+                    String newFileName = dataInput.readUTF();
+                    File oldFile = new File(oldFileName);
+                    File newFile = new File(newFileName);
+                    if (oldFile.renameTo(newFile)) {
+                        dataOutput.writeUTF("S");
+                    }
+                    else {
+                        dataOutput.writeUTF("F");
+                    }
+
                 default:
                     dataOutput.writeUTF("F");
                     break;

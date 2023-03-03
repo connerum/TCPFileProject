@@ -46,6 +46,14 @@ public class FileClient {
                         System.out.println(status.equals("S") ? "operation successful" : "operation failed");
                         break;
 
+                    case "R":
+                        String oldFileName = console.readLine();
+                        String newFileName = console.readLine();
+                        output.writeUTF(oldFileName);
+                        output.writeUTF(newFileName);
+                        status = input.readUTF();
+                        System.out.println(status.equals("S") ? "operation successful" : "operation failed");
+
                     default:
                         System.out.println("Invalid command.");
                         break;
