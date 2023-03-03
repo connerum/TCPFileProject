@@ -47,12 +47,33 @@ public class FileClient {
                         break;
 
                     case "R":
+                        output.writeByte('R');
                         String oldFileName = console.readLine();
                         String newFileName = console.readLine();
                         output.writeUTF(oldFileName);
                         output.writeUTF(newFileName);
                         status = input.readUTF();
                         System.out.println(status.equals("S") ? "operation successful" : "operation failed");
+                        break;
+
+                    case "O":
+                        output.writeByte('O');
+                        fileName = console.readLine();
+                        output.writeUTF(fileName);
+
+                        try (FileOutputStream fos = new FileOutputStream(fileName)) {
+                            byte[] buffer = new byte[4096];
+                            int bytesRead;
+                            while ((bytesRead = input.read(buffer)) != -1) {
+                                fos.write(buffer, 0, bytesRead);
+                            }
+                        }
+                        catch (IOException e) {
+                            System.err.println("Error: " + e.getMessage());
+                        }
+                        status = input.readUTF();
+                        System.out.println(status.equals("S") ? "operation successful" : "operation failed");
+                        break;
 
                     default:
                         System.out.println("Invalid command.");

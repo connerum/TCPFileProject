@@ -67,6 +67,7 @@ class ServerThread extends Thread {
                     else {
                         dataOutput.writeUTF("F");
                     }
+                    break;
 
                 case 'R':
                     String oldFileName = dataInput.readUTF();
@@ -79,6 +80,26 @@ class ServerThread extends Thread {
                     else {
                         dataOutput.writeUTF("F");
                     }
+                    break;
+
+                case 'O':
+                    fileName = dataInput.readUTF();
+                    file = new File(fileName);
+                    if (!file.exists()) {
+                        dataOutput.writeUTF("F");
+                    }
+                    else {
+                        try (FileInputStream fis = new FileInputStream(file)) {
+                            byte[] buffer = new byte[4096];
+                            int bytesRead;
+                            while ((bytesRead = fis.read(buffer)) != -1) {
+                                dataOutput.write(buffer, 0, bytesRead);
+                            }
+                            dataOutput.writeUTF("S");
+                        }
+                    }
+                    break;
+
 
                 default:
                     dataOutput.writeUTF("F");
