@@ -54,74 +54,17 @@ class ServerThread extends Thread {
                     }
                 }
                 dataOutput.writeUTF("END");
-            } else if (command == 'D') {
-                // Delete file
-                String fileName = dataInput.readUTF();
-                File file = new File(fileName);
-
-                if (file.delete()) {
-                    dataOutput.writeByte('S'); // Success
-                } else {
-                    dataOutput.writeByte('F'); // Failure
-                }
-            } else if (command == 'R') {
-                // Rename file
-                String oldFileName = dataInput.readUTF();
-                String newFileName = dataInput.readUTF();
-                File oldFile = new File(oldFileName);
-                File newFile = new File(newFileName);
-
-                if (oldFile.renameTo(newFile)) {
-                    dataOutput.writeByte('S'); // Success
-                } else {
-                    dataOutput.writeByte('F'); // Failure
-                }
-            } else if (command == 'U') {
-                // Upload file
-                String fileName = dataInput.readUTF();
-                File file = new File(fileName);
-
-                if (file.exists()) {
-                    dataOutput.writeByte('F'); // Failure
-                } else {
-                    try (FileOutputStream fos = new FileOutputStream(file)) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = dataInput.read(buffer)) != -1) {
-                            fos.write(buffer, 0, bytesRead);
-                        }
-                        dataOutput.writeByte('S'); // Success
-                    } catch (IOException e) {
-                        dataOutput.writeByte('F'); // Failure
-                    }
-                }
-            } else if (command == 'O') {
-                // Download file
-                String fileName = dataInput.readUTF();
-                File file = new File(fileName);
-
-                if (!file.exists()) {
-                    dataOutput.writeByte('F'); // Failure
-                } else {
-                    try (FileInputStream fis = new FileInputStream(file)) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = fis.read(buffer)) != -1) {
-                            dataOutput.write(buffer, 0, bytesRead);
-                        }
-                        dataOutput.writeByte('S'); // Success
-                    } catch (IOException e) {
-                        dataOutput.writeByte('F'); // Failure
-                    }
-                }
             }
             clientSocket.shutdownOutput();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
-        } finally {
+        }
+        finally {
             try {
                 clientSocket.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 System.err.println("Error: " + e.getMessage());
             }
         }
