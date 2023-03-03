@@ -90,16 +90,18 @@ class ServerThread extends Thread {
                     }
                     else {
                         try (FileInputStream fis = new FileInputStream(file)) {
-                            byte[] buffer = new byte[4096];
-                            int bytesRead;
-                            while ((bytesRead = fis.read(buffer)) != -1) {
-                                dataOutput.write(buffer, 0, bytesRead);
+                            int fileSize = (int) file.length();
+                            byte[] buffer = new byte[fileSize];
+                            int bytesRead = fis.read(buffer);
+                            if (bytesRead != fileSize) {
+                                dataOutput.writeUTF("F"); // Failure
+                            } else {
+                                dataOutput.write(buffer, 0, fileSize);
+                                dataOutput.writeUTF("S");
                             }
-                            dataOutput.writeUTF("S");
                         }
                     }
                     break;
-
 
                 default:
                     dataOutput.writeUTF("F");
