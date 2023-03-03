@@ -67,12 +67,12 @@ public class FileClient {
                             while ((bytesRead = input.read(buffer)) != -1) {
                                 fos.write(buffer, 0, bytesRead);
                             }
+                            status = input.readUTF();
+                            System.out.println(status.equals("S") ? "operation successful" : "operation failed");
                         }
                         catch (IOException e) {
                             System.err.println("Error: " + e.getMessage());
                         }
-                        status = input.readUTF();
-                        System.out.println(status.equals("S") ? "operation successful" : "operation failed");
                         break;
 
                     default:

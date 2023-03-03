@@ -97,8 +97,8 @@ class ServerThread extends Thread {
                                 dataOutput.writeUTF("F"); // Failure
                             } else {
                                 dataOutput.write(buffer, 0, fileSize);
-                                dataOutput.writeUTF("S");
                             }
+                            dataOutput.writeUTF("S");
                         }
                     }
                     break;
