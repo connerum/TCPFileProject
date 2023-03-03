@@ -85,22 +85,23 @@ class ServerThread extends Thread {
                 case 'O':
                     fileName = dataInput.readUTF();
                     file = new File(fileName);
+
                     if (!file.exists()) {
-                        dataOutput.writeUTF("F");
-                    }
-                    else {
+                        dataOutput.writeUTF("F"); // Failure
+                    } else {
                         try (FileInputStream fis = new FileInputStream(file)) {
                             int fileSize = (int) file.length();
                             byte[] buffer = new byte[fileSize];
                             int bytesRead = fis.read(buffer);
                             if (bytesRead != fileSize) {
                                 dataOutput.writeUTF("F"); // Failure
-                            }
-                            else {
+                            } else {
+                                dataOutput.writeUTF("S"); // Success
                                 dataOutput.write(buffer, 0, fileSize);
                             }
+                        } catch (IOException e) {
+                            dataOutput.writeUTF("S"); // Failure
                         }
-                        dataOutput.writeUTF("S");
                     }
                     break;
 
