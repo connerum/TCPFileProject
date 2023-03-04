@@ -57,21 +57,23 @@ public class FileClient {
                         break;
 
                     case "O":
-                        output.writeByte('O');
                         fileName = console.readLine();
                         output.writeUTF(fileName);
 
-                        try (FileOutputStream fos = new FileOutputStream(fileName)) {
-                            byte[] buffer = new byte[4096];
-                            int bytesRead;
-                            while ((bytesRead = input.read(buffer)) != -1) {
-                                fos.write(buffer, 0, bytesRead);
+                        if (input.readUTF() == "F") {
+                            System.out.println("File not found.");
+                        } else {
+                            try (FileOutputStream fos = new FileOutputStream(fileName)) {
+                                byte[] buffer = new byte[4096];
+                                int bytesRead;
+                                while ((bytesRead = input.read(buffer)) != -1) {
+                                    fos.write(buffer, 0, bytesRead);
+                                }
+                                status = input.readUTF();
+                                System.out.println(status.equals("S") ? "operation successful" : "operation failed");
+                            } catch (IOException e) {
+                                System.err.println("Error: " + e.getMessage());
                             }
-                            status = input.readUTF();
-                            System.out.println(status.equals("S") ? "operation successful" : "operation failed");
-                        }
-                        catch (IOException e) {
-                            System.err.println("Error: " + e.getMessage());
                         }
                         break;
 
